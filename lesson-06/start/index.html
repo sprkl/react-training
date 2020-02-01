@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+  <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>React training - Lesson 06</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    />
+
+    <style rel="stylesheet">
+      button {
+        display: block;
+        margin-bottom: 12px !important;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="#">upgrade your browser</a> to improve your experience.
+      </p>
+    <![endif]-->
+
+    <h1>React training - Lesson 06</h1>
+
+    <div id="component"></div>
+
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@material-ui/core@latest/umd/material-ui.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+      const { Button, Typography } = MaterialUI;
+      class HelloWorld extends React.Component {
+        state = {
+          name: "Renaud",
+          age: 30
+        };
+
+        handleClick(e) {
+          console.log(this);
+          console.log(e.target);
+        }
+
+        handleMouseOver(e) {
+          console.log(e.target, e.pageX);
+        }
+
+        handleCopy(e) {
+          e.clipboardData.setData("text/plain", "Ceux qui font du React et les autres.");
+          e.preventDefault();
+        }
+
+        render() {
+          const handleClickBoundToThis = function(e) {
+            console.log(this);
+          }.bind(this);
+
+          const handleClickArrowFunction = e => {
+            console.log(this);
+          };
+
+          return (
+            <div className="component-container">
+              <Typography variant="h2">Hello le MIC !</Typography>
+              <p>
+                Je m'appelle {this.state.name} et j'ai {this.state.age} ans.
+              </p>
+
+              <Button
+                onClick={this.handleClick}
+                variant="contained"
+                color="primary"
+                className="mb-1"
+                style={{ display: "block" }}>
+                Click me (normal handler)
+              </Button>
+
+              <Button
+                onClick={this.handleClick.bind(this)}
+                variant="contained"
+                color="primary"
+                className="mb-1"
+                style={{ display: "block" }}>
+                Click me (normal handler + bind)
+              </Button>
+
+
+              <Button
+                onClick={handleClickBoundToThis}
+                variant="contained"
+                color="primary"
+                className="mb-1"
+                style={{ display: "block" }}>
+                Click me (bound)
+              </Button>
+
+              <Button
+                onClick={handleClickArrowFunction}
+                variant="contained"
+                color="primary"
+                className="mb-1"
+                style={{ display: "block" }}>
+                Click me (arrow)
+              </Button>
+
+              <button onMouseOver={this.handleMouseOver}>Hover me !</button>
+
+              <p onCopy={this.handleCopy}>Il y a 10 types de développeurs</p>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<HelloWorld />, document.getElementById("component"));
+    </script>
+  </body>
+</html>
