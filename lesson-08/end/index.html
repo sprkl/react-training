@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+  <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>React training - Lesson 08</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    />
+
+    <style rel="stylesheet">
+      body {
+        background-color: #f5f5f5;
+      }
+      button {
+        display: block;
+        margin-bottom: 12px !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="#">upgrade your browser</a> to improve your experience.
+      </p>
+    <![endif]-->
+
+    <h1>React training - Lesson 08</h1>
+
+    <div id="component"></div>
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@material-ui/core@latest/umd/material-ui.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.13.1/validate.min.js"></script>
+
+    <script type="text/babel">
+      const { Button, Typography, Card, CardHeader, CardContent, CardActions } = MaterialUI;
+
+      const schema = {
+        name: {
+          presence: { allowEmpty: false, message: "Le champ ne peut pas être vide." },
+          exclusion: {
+            within: ["Chuck Norris"],
+            message: "Déso, vous ne pouvez pas être Chuck Norris."
+          }
+        }
+      };
+
+      class HelloWorld extends React.Component {
+        state = {
+          newName: "",
+          name: "Renaud",
+          age: 30
+        };
+
+        handleNameChange = event => {
+          this.setState(
+            {
+              success: undefined,
+              newName: event.target.value
+            },
+            () => {
+              const model = {
+                name: this.state.newName
+              };
+
+              validate
+                .async(model, schema, { fullMessages: false })
+                .then(this.onSuccess, this.onError);
+            }
+          );
+        };
+
+        onSubmit = e => {
+          e.preventDefault();
+          if (!this.state.success) {
+            this.setState({
+              name: this.state.newName,
+              success: undefined
+            });
+          }
+        };
+
+        onSuccess = test => {
+          this.setState({
+            errors: null,
+            success: true
+          });
+        };
+
+        onError = errors => {
+          this.setState({
+            errors,
+            success: false
+          });
+        };
+
+        render() {
+          const displayName = this.state.newName || this.state.name;
+
+          return (
+            <div className="component-container">
+              <Typography variant="h2">Hello le MIC !</Typography>
+              <p>
+                Je m'appelle {displayName} et j'ai {this.state.age} ans.
+              </p>
+
+              <Card>
+                <CardHeader title="Veuillez renseigner votre identité"></CardHeader>
+                <CardContent>
+                  <form onSubmit={this.onSubmit} autoComplete="off">
+                    <input
+                      type="text"
+                      name="Name"
+                      value={this.state.newName}
+                      placeholder="Votre nom"
+                      onChange={this.handleNameChange}
+                    />
+                  </form>
+                  {this.state.errors &&
+                    this.state.errors["name"] &&
+                    this.state.errors["name"].map((error, index) => (
+                      <div key={index} style={{ color: "red" }}>
+                        <p>{error}</p>
+                      </div>
+                    ))}
+                </CardContent>
+                <CardActions>
+                  {/* 
+                    <Button click={this.onSubmit} variant="contained" size="small" color="primary">
+                    Sauvegarder
+                  </Button> 
+                */}
+                  <Button
+                    disabled={!this.state.success}
+                    variant="contained"
+                    size="small"
+                    color="primary">
+                    Sauvegarder
+                  </Button>
+                </CardActions>
+              </Card>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<HelloWorld />, document.getElementById("component"));
+    </script>
+  </body>
+</html>
