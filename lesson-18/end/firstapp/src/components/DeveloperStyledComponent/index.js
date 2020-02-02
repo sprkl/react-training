@@ -23,6 +23,7 @@ const DeveloperItem = styled.div`
   padding-bottom: 12px;
   margin-bottom: 6px;
   border-bottom: 1px solid ${props => props.color};
+  transition: all 1s;
 `;
 
 const BoldText = styled.p`
