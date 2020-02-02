@@ -1,0 +1,13 @@
+.developer-item {
+  padding-bottom: 12px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid gray;
+}
+
+.developer-item button {
+  border-radius: 50%;
+}
+
+div {
+  font-family: "Comic Sans MS";
+}
